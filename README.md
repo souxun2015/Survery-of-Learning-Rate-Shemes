@@ -20,5 +20,86 @@ This project mainly introduces the learning rate schemes provided by tensorflow 
 - 15. AMSGradOptimizer
 We conduct experiments on Cifar10 with these shemes, and then make analyses on different combinations among them.
 
+### Learning Rate Decay Schemes
+- 1. exponential_decay
+```
+# python
+decayed_learning_rate = learning_rate * decay_rate ^ (global_step / decay_steps)
+If the argument `staircase` is `True`, then `global_step / decay_steps` is an integer division and the decayed learning rate follows a staircase function.
+```
+- 2. piecewise_constant_decay
+```
+Example: use a learning rate that's 1.0 for the first 100001 steps, 0.5 for the next 10000 steps, and 0.1 for any additional steps.
+```
+- 3. polynomial_decay
+```
+global_step = min(global_step, decay_steps)
+decayed_learning_rate = (learning_rate - end_learning_rate) *
+(1 - global_step / decay_steps) ^ (power) +
+end_learning_rate
+
+If `cycle` is True then a multiple of `decay_steps` is used, the first one that is bigger than `global_steps`.
+
+decay_steps = decay_steps * ceil(global_step / decay_steps)
+decayed_learning_rate = (learning_rate - end_learning_rate) *
+(1 - global_step / decay_steps) ^ (power) + end_learning_rate
+```
+- 4. inverse_time_decay
+```
+When training a model, it is often recommended to lower the learning rate as the training progresses.  This function applies an inverse decay function to a provided initial learning rate.
+
+decayed_learning_rate = learning_rate / (1 + decay_rate * global_step / decay_step)
+```
+- 5. cosine_decay
+```
+See [Loshchilov & Hutter, ICLR2016], SGDR: Stochastic Gradient Descent with Warm Restarts. https://arxiv.org/abs/1608.03983
+
+When training a model, it is often recommended to lower the learning rate as the training progresses. This function applies a cosine decay function to a provided initial learning rate.
+
+global_step = min(global_step, decay_steps)
+cosine_decay = 0.5 * (1 + cos(pi * global_step / decay_steps))
+decayed = (1 - alpha) * cosine_decay + alpha
+decayed_learning_rate = learning_rate * decayed
+```
+- 6. cosine_decay_restarts
+```
+See [Loshchilov & Hutter, ICLR2016], SGDR: Stochastic Gradient Descent with Warm Restarts. https://arxiv.org/abs/1608.03983
+
+When training a model, it is often recommended to lower the learning rate as the training progresses. This function applies a cosine decay function with restarts to a provided initial learning rate.
+
+The function returns the decayed learning rate while taking into account possible warm restarts. The learning rate multiplier first decays from 1 to `alpha` for `first_decay_steps` steps. Then, a warm
+restart is performed. Each new warm restart runs for `t_mul` times more steps and with `m_mul` times smaller initial learning rate.
+```
+- 7. linear_cosine_decay
+```
+See [Bello et al., ICML2017] Neural Optimizer Search with RL.
+https://arxiv.org/abs/1709.07417
+
+For the idea of warm starts here controlled by `num_periods`,
+see [Loshchilov & Hutter, ICLR2016] SGDR: Stochastic Gradient Descent with Warm Restarts. https://arxiv.org/abs/1608.03983
+Note that linear cosine decay is more aggressive than cosine decay and larger initial learning rates can typically be used.
+```
+- 8. noisy_linear_cosine_decay
+```
+When training a model, it is often recommended to lower the learning rate as the training progresses.  This function applies a noisy linear cosine decay function to a provided initial learning rate.
+
+global_step = min(global_step, decay_steps)
+linear_decay = (decay_steps - global_step) / decay_steps)
+cosine_decay = 0.5 * (
+1 + cos(pi * 2 * num_periods * global_step / decay_steps))
+decayed = (alpha + linear_decay + eps_t) * cosine_decay + beta
+decayed_learning_rate = learning_rate * decayed
+
+where eps_t is 0-centered gaussian noise with variance
+initial_variance / (1 + global_step) ** variance_decay
+```
+### Optimizer Schemes
+- 9. tf.train.AdadeletaOptimizer
+- 10. tf.train.AdagradOptimizer
+- 11. tf.train.MomentumOptimizer
+- 12. tf.train.AdamOptimizer
+- 13. tf.train.FtrlOptimizer
+- 14. tf.train.RMSPropOptimizer
+- 15. AMSGradOptimizer
 ## Comparable Analyses
 - 1. 

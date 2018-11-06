@@ -29,7 +29,7 @@ import tensorflow as tf
 parser = argparse.ArgumentParser()
 
 # Basic model parameters.
-parser.add_argument('--data_dir', type=str, default='../Data/cifar10_data',
+parser.add_argument('--data_dir', type=str, default='Data/cifar10_data',
                     help='The path to the CIFAR-10 data directory.')
 
 parser.add_argument('--model_dir', type=str, default='Model',
