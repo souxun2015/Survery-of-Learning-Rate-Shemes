@@ -326,7 +326,7 @@ def cifar10_model_fn(features, labels, mode, params):
                                                       num_periods=0.5,
                                                       alpha=0.0,
                                                       beta=0.001)
-
+          
       # Create a tensor named learning_rate for logging purposes
       tf.identity(learning_rate, name='learning_rate')
       tf.summary.scalar('learning_rate', learning_rate)

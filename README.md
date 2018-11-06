@@ -11,13 +11,11 @@ This project mainly introduces the learning rate schemes provided by tensorflow 
 - 6. cosine_decay_restarts
 - 7. linear_cosine_decay
 - 8. noisy_linear_cosine_decay
-- 9. tf.train.AdadeletaOptimizer
-- 10. tf.train.AdagradOptimizer
-- 11. tf.train.MomentumOptimizer
-- 12. tf.train.AdamOptimizer
+- 9. tf.train.GradientDescentOptimizer
+- 10. tf.train.MomentumOptimizer
+- 11. tf.train.AdamOptimizer // tf.train.AdagradOptimizer // tf.train.AdadeletaOptimizer // tf.train.AdagradDAOptimizer
+- 12. tf.train.RMSPropOptimizer
 - 13. tf.train.FtrlOptimizer
-- 14. tf.train.RMSPropOptimizer
-- 15. AMSGradOptimizer
 We conduct experiments on Cifar10 with these shemes, and then make analyses on different combinations among them.
 
 ### Learning Rate Decay Schemes
@@ -94,12 +92,39 @@ where eps_t is 0-centered gaussian noise with variance
 initial_variance / (1 + global_step) ** variance_decay
 ```
 ### Optimizer Schemes
-- 9. tf.train.AdadeletaOptimizer
-- 10. tf.train.AdagradOptimizer
-- 11. tf.train.MomentumOptimizer
-- 12. tf.train.AdamOptimizer
+- 9. tf.train.GradientDescentOptimizer
+This is original optimizer, the gradient is just based on the current batch.
+- 10. tf.train.MomentumOptimizer
+This optimizer contains a momentum to update the gradients. It means that updating the gradient is relationed to the previous batches.
+In the its inputs, there is a switch to control how to update the variables(original Momentum or Nesterov Momentum)
+- 11. tf.train.AdamOptimizer // tf.train.AdagradOptimizer // tf.train.AdadeletaOptimizer // tf.train.AdagradDAOptimizer
+
+- 12. tf.train.RMSPropOptimizer
+```
+__init__(
+learning_rate,
+decay=0.9,
+momentum=0.0,
+epsilon=1e-10,
+use_locking=False,
+centered=False,
+name='RMSProp'
+)
+```
 - 13. tf.train.FtrlOptimizer
-- 14. tf.train.RMSPropOptimizer
-- 15. AMSGradOptimizer
+```
+__init__(
+learning_rate,
+learning_rate_power=-0.5,
+initial_accumulator_value=0.1,
+l1_regularization_strength=0.0,
+l2_regularization_strength=0.0,
+use_locking=False,
+name='Ftrl',
+accum_name=None,
+linear_name=None,
+l2_shrinkage_regularization_strength=0.0
+)
+```
 ## Comparable Analyses
 - 1. 
