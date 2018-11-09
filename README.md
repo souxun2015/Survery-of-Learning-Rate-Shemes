@@ -92,6 +92,8 @@ where eps_t is 0-centered gaussian noise with variance
 initial_variance / (1 + global_step) ** variance_decay
 ```
 ### Optimizer Schemes
+This is  a great post that gives a comprehensive introduction to the optimizer schemes.
+http://ruder.io/optimizing-gradient-descent/index.html#fn25 
 - 9. tf.train.GradientDescentOptimizer
 This is original optimizer, the gradient is just based on the current batch.
 - 10. tf.train.MomentumOptimizer
